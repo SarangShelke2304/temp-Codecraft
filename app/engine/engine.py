@@ -54,7 +54,9 @@ async def execute_dag(_nodes, _connections):
         execution_order.append(node)
 
         # Simulate execution (replace with actual node execution)
+
         print(f"Executing {node}")
+
 
         # Reduce in-degree of dependent nodes
         for neighbor in adj_list[node]:

@@ -22,7 +22,7 @@ class WorkflowResponse(WorkflowBase):
     created_at: datetime
     updated_at: datetime
     created_by: uuid.UUID
-    dsl_file: Dict[Any, Any]
+    dsl_file: Optional[Dict[Any, Any]]
 
     class Config:
         from_attributes = True
