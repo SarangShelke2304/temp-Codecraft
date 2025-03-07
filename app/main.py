@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from app.api.endpoints import workflows
 from fastapi.middleware.cors import CORSMiddleware
