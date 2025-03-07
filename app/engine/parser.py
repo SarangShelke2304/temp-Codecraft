@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+import json
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from uuid import UUID
@@ -12,7 +12,10 @@ class NodeConfig:
     x_coordinate: Optional[int] = None
     y_coordinate: Optional[int] = None
     sessionID: Optional[str] = None
-    files: Optional[str] = None
+    filepath: Optional[str] = None
+    fileText: Optional[str] = None
+    fileBase64: Optional[str] = None
+    fileType: Optional[str] = None
     modelName: Optional[str] = None
     temperature: Optional[float] = None
     input: Optional[str] = None
@@ -49,9 +52,10 @@ class Workflow:
 class WorkflowParser:
     @staticmethod
     def parse(__json__) -> Workflow:
-        # with open(file_path, 'r') as f:
+        # with open(__json__, 'r') as f:
+        #     workflow_data = json.load(f)
         workflow_data = __json__
-
+            # print(workflow_data)
         # workflow_data = data['workflow']
         # print(workflow_data['nodes'])
         # Parse nodes
@@ -91,7 +95,7 @@ def parse_dsl_file(__json__):
 # Usage example
 # if __name__ == "__main__":
 #     parser = WorkflowParser()
-#     workflow = parser.parse(r"D:\codecraft\DSL.json")
+#     workflow = parser.parse(r"D:\temp-codecraft\DSL2.json")
 #
 #     # Example: Print all node types
 #     for node_name, node in workflow.nodes.items():
