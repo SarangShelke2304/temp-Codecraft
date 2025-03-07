@@ -68,7 +68,9 @@ class WorkflowParser:
                 inputs=node_data.get('inputs', []),
                 outputs=node_data.get('outputs', [])
             )
-
+        # print(nodes)
+        for node in nodes:
+            print(node, "\n")
         # Parse connections
         connections = []
         for connection in workflow_data['connections']:

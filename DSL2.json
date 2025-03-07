@@ -1,0 +1,137 @@
+{
+    "version": 1,
+    "workflow_id": "8f46e96c-b951-4e1e-b057-85aac857ab7e",
+    "workflow_name": "ionsnds",
+    "description": "temp",
+    "created_by": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "nodes": {
+        "file_1741352636557": {
+            "type": "File",
+            "id": "file_1741352636557",
+            "position": {
+                "x": 0.5566771351273019,
+                "y": 102.04434946958264
+            },
+            "config": {
+                "filepath": "",
+                "fileText": "",
+                "fileBase64": "",
+                "fileType": ""
+            }
+        },
+        "node_1741352656089": {
+            "type": "TextInput",
+            "id": "node_1741352656089",
+            "position": {
+                "x": 25.872086679855045,
+                "y": 357.4582261071053
+            },
+            "config": {
+
+            }
+        },
+        "node_1741352684313": {
+            "type": "TextInput",
+            "id": "node_1741352684313",
+            "position": {
+                "x": 277.13415932280054,
+                "y": 373.275336835208
+            },
+            "config": {
+
+            }
+        },
+        "model_1741352693461": {
+            "type": "ModelNode",
+            "id": "model_1741352693461",
+            "position": {
+                "x": 493.41490487081103,
+                "y": 169.38868410560258
+            },
+            "config": {
+                "modelName": "ChatGpt O-3",
+                "temperature": 0.5,
+                "input": "receiving_input",
+                "system_message": "system_message",
+                "maximum_tokens": 4096,
+                "API_key": ""
+            }
+        },
+        "node_1741352700546": {
+            "type": "TextInput",
+            "id": "node_1741352700546",
+            "position": {
+                "x": 806.7908875062545,
+                "y": 161.73587844230047
+            },
+            "config": {
+
+            }
+        },
+        "node_1741352705507": {
+            "type": "TextInput",
+            "id": "node_1741352705507",
+            "position": {
+                "x": 814.279956844064,
+                "y": 402.22577659611875
+            },
+            "config": {
+
+            }
+        }
+    },
+    "connections": [
+        {
+        "from": {
+            "node": "file_1741352636557",
+            "output": "output"
+        },
+            "to": {
+                "node": "model_1741352693461",
+                "input": "default"
+            }
+        },
+        {
+            "from": {
+                "node": "node_1741352656089",
+                "output": "default"
+            },
+            "to": {
+                "node": "node_1741352684313",
+                "input": "default"
+            }
+        },
+        {
+            "from": {
+                "node": "node_1741352684313",
+                "output": "default"
+            },
+            "to": {
+                "node": "model_1741352693461",
+                "input": "default"
+            }
+        },
+        {
+            "from": {
+                "node": "model_1741352693461",
+                "output": "default"
+            },
+            "to": {
+                "node": "node_1741352700546",
+                "input": "default"
+            }
+        },
+        {
+            "from": {
+                "node": "model_1741352693461",
+                "output": "default"
+            },
+            "to": {
+                "node": "node_1741352705507",
+                "input": "default"
+            }
+        }
+    ],
+    "status": "paused",
+    "created_at": "2025-03-07T13:02:50.784004"
+}
