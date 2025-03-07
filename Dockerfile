@@ -20,4 +20,5 @@ EXPOSE 8000
 VOLUME ["test.db"]
 
 # Run the command to start the development server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["sh", "-c", "python ./app/main.py"]
