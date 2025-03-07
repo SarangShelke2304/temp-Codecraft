@@ -49,6 +49,11 @@ FastAPI automatically generates interactive API documentation. You can access it
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
 
+## Creating docker image and running it
+docker build -t lcnc_platform .
+
+
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
