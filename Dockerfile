@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the requirements file
-COPY app/requirements.txt .
+COPY requirements.txt .
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -17,7 +17,7 @@ COPY app/ .
 EXPOSE 8000
 
 # Create a volume for the test.db file
-VOLUME ["/app/test.db"]
+VOLUME ["test.db"]
 
 # Run the command to start the development server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
