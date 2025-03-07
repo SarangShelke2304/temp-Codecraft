@@ -50,9 +50,9 @@ class WorkflowParser:
     @staticmethod
     def parse(__json__) -> Workflow:
         # with open(file_path, 'r') as f:
-        data = __json__
+        workflow_data = __json__
 
-        workflow_data = data['workflow']
+        # workflow_data = data['workflow']
         # print(workflow_data['nodes'])
         # Parse nodes
         nodes = {}

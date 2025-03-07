@@ -1,7 +1,6 @@
 from app.engine.parser import parse_dsl_file
 from collections import deque
 
-
 # def compute_in_degrees(workflow: Workflow):
 #     """
 #     Computes the in-degree (number of dependencies) for each node in the workflow.
@@ -83,3 +82,12 @@ async def parse_and_get_order(__json__):
     #     print(node)
     order = await execute_dag(nodes, connections)
     return order
+
+
+# import asyncio
+#
+# async def main():
+#     order = await parse_and_get_order(r"D:\temp-Codecraft\DSL2.json")  # Await the coroutine
+#     print(order)
+#
+# asyncio.run(main())
