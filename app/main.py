@@ -32,8 +32,4 @@ if __name__ == "__main__":
         "reload": True
     }
 
-
-logger.info(
-        f"The server is starting at http://{uvicorn_args['host']}:{uvicorn_args['port']} in dev  mode"
-    )
 uvicorn.run(**uvicorn_args)
