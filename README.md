@@ -52,12 +52,8 @@ FastAPI automatically generates interactive API documentation. You can access it
 ## Creating docker image and running it
 docker build -t lcnc_platform .
 
-
+docker run -d -p 8000:8000 --name lcnc_platform_container --env-file .env lcnc_platform
 
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-
-<font size="0"><span style="color:grey"><br>_This is an Easter Egg. Thanks for reading until the end. <br>
--Sarang Shelke_</span>

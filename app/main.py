@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from app.api.endpoints import workflows
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,5 +25,12 @@ async def root():
     return {"message": "Welcome to CodeCraft API"}
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    # Script to run in develop mode
+    uvicorn_args = {
+        "app": "app.main:app",
+        "host": "0.0.0.0",
+        "port": 8000,
+        "reload": True
+    }
+
+    uvicorn.run(**uvicorn_args)

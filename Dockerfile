@@ -1,23 +1,38 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
 
-# Set the working directory in the container
-WORKDIR /app
 
-# Copy the requirements file
+FROM python:3.11.9-slim-bullseye
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONHASHSEED=random \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    libmagic1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+ENV PATH="/opt/pysetup/.venv/bin:$PATH"
+# Copy requirements file
 COPY requirements.txt .
 
-# Install the dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY app/ .
+# Create app user and directory
+RUN useradd -m app
+RUN mkdir -p /app/logs && chown -R app:app /app/logs
 
-# Expose the port that the application will run on
-EXPOSE 8000
+# Set working directory and user
+WORKDIR /app
+USER app
 
-# Create a volume for the test.db file
-VOLUME ["test.db"]
+# Copy application code
+COPY --chown=app:app ./app ./app
 
-# Run the command to start the development server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Set command to run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
