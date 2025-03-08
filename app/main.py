@@ -2,8 +2,13 @@ import uvicorn
 from fastapi import FastAPI
 from app.api.endpoints import workflows
 from fastapi.middleware.cors import CORSMiddleware
+from app.db.session import init_db
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
 
 origins = [
     "http://localhost",
