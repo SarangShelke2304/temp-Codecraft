@@ -1,4 +1,5 @@
 
+
 FROM python:3.11.9-slim-bullseye
 
 # Set environment variables
@@ -34,4 +35,4 @@ USER app
 COPY --chown=app:app ./app ./app
 
 # Set command to run the application
-CMD ["python ./app/main.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

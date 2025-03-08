@@ -25,7 +25,7 @@ async def root():
     return {"message": "Welcome to CodeCraft API"}
 
 if __name__ == "__main__":
-    # Script to run in develop mode, so importing uvicorn only when needed
+    # Script to run in develop mode
     uvicorn_args = {
         "app": "app.main:app",
         "host": "0.0.0.0",
