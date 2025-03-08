@@ -1,5 +1,6 @@
 from app.engine.parser import parse_dsl_file
 from collections import deque
+from app.engine.tools_executor import execute_file_input, execute_llm, execute_chat_input
 
 # def compute_in_degrees(workflow: Workflow):
 #     """
@@ -62,6 +63,26 @@ async def execute_dag(_nodes, _connections):
             in_degree[neighbor] -= 1
             if in_degree[neighbor] == 0:
                 queue.append(neighbor)
+    temp = []
+    # temp1 = []
+    for node_name, node in _nodes.items():
+        temp.append({node_name: node})
+        # temp1.append({node_name: node})
+    # print(temp)
+    # print('\n', temp1)
+    #     # print(f"Node name: {node_name}, type: {node.type}")
+    #
+    for _node in execution_order:
+        for node_name, node in temp:
+            if node_name == node:
+                if node.type=='File':
+                    file_text=execute_file_input(node.config.path)
+                if node.type=='TextInput':
+                    text_input=execute_chat_input(text=node.config.input)
+                if node.type=='ModelNode':
+                    llm_response=execute_llm(node.config.modelName, node.config.input, api_key=node.config.API_key)
+
+
 
     return execution_order
 
@@ -78,8 +99,8 @@ async def parse_and_get_order(__json__):
     # for connection in connections:
     #     print(connection)
     nodes = workflow.nodes
-    # for node in nodes:
-    #     print(node)
+    # for node_name, node in nodes.items():
+    #     print(f"Node name: {node_name}, type: {node.type}")
     order = await execute_dag(nodes, connections)
     return order
 
