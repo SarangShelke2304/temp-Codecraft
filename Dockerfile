@@ -15,7 +15,7 @@ RUN apt-get update && \
     libmagic1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
+ENV PATH="/opt/pysetup/.venv/bin:$PATH"
 # Copy requirements file
 COPY requirements.txt .
 
@@ -34,4 +34,4 @@ USER app
 COPY --chown=app:app ./app ./app
 
 # Set command to run the application
-CMD ["python", "./app/main.py"]
+CMD ["python ./app/main.py"]
