@@ -55,9 +55,9 @@ async def start_workflow_execution(workflow_id: uuid.UUID):
         workflow = await session.execute(select(Workflow).filter(Workflow.workflow_id == workflow_id))
         wf = workflow.scalars().first()
         dsl_file = wf.dsl_file
-        order = await engine.parse_and_get_order(dsl_file)
+        # order = await engine.parse_and_get_order(dsl_file)
         await session.commit()
-    return {"message": "Execution started", "execution_id": 123, "order": order}
+    return {"message": "Execution started", "execution_id": 123}
 
 async def get_execution_status(workflow_id: uuid.UUID, execution_id: uuid.UUID):
     # Simulate checking execution status
