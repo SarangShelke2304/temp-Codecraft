@@ -11,7 +11,7 @@ async def on_startup():
     await init_db()
 
 origins = [
-    "http://localhost",
+    "http://localhost:3000",
     "http://localhost:5173"
 ]
 

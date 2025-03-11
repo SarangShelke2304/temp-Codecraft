@@ -11,6 +11,7 @@ class NodeConfig:
     store_messages: Optional[str] = None
     x_coordinate: Optional[int] = None
     y_coordinate: Optional[int] = None
+    Text:Optional[str] = None
     sessionID: Optional[str] = None
     filepath: Optional[str] = None
     fileText: Optional[str] = None
@@ -52,9 +53,9 @@ class Workflow:
 class WorkflowParser:
     @staticmethod
     def parse(__json__) -> Workflow:
-        # with open(__json__, 'r') as f:
-        #     workflow_data = json.load(f)
-        workflow_data = __json__
+        with open(__json__, 'r') as f:
+            workflow_data = json.load(f)
+        # workflow_data = __json__
             # print(workflow_data)
         # workflow_data = data['workflow']
         # print(workflow_data['nodes'])

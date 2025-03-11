@@ -14,7 +14,7 @@
             },
             "config": {
                 "filepath": "",
-                "fileText": "",
+                "fileText": "abc",
                 "fileBase64": "",
                 "fileType": ""
             }
@@ -38,7 +38,7 @@
                 "y": 373.275336835208
             },
             "config": {
-
+                "Text": "hi"
             }
         },
         "model_1741352693461": {

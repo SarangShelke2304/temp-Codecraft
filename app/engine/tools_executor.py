@@ -5,41 +5,44 @@ import openai
 from anthropic import Anthropic
 from mistralai import Mistral
 
-def execute_file_input(path_to_file):
-    if not os.path.isfile(path_to_file):
-        raise FileNotFoundError(path_to_file)
-    file_extension = os.path.splitext(path_to_file)[-1].lower()
-    # print(file_extension)
+# def execute_file_input(path_to_file):
+#     if not os.path.isfile(path_to_file):
+#         raise FileNotFoundError(path_to_file)
+#     file_extension = os.path.splitext(path_to_file)[-1].lower()
+#     # print(file_extension)
+#
+#     if file_extension in ['.txt', '.log']:
+#         with open(path_to_file, mode='r', encoding='utf-8') as f:
+#             return f.read()
+#     elif file_extension in ['.json']:
+#         with open(path_to_file, mode='r', encoding='utf-8') as f:
+#             data = json.loads(f.read())
+#             return json.dumps(data, indent=4)
+#     elif file_extension in ['.csv']:
+#         text_output = []
+#         with open(path_to_file, mode='r', encoding='utf-8') as f:
+#             reader = csv.reader(f)
+#             for row in reader:
+#                 text_output.append(', '.join(row))
+#         return '\n'.join(text_output)
+#     elif file_extension in ['.pdf']:
+#         text_output = []
+#         with open(path_to_file, mode='rb') as f:
+#             reader = pypdf.PdfReader(f)
+#             for page in reader.pages:
+#                 text_output.append(page.extract_text() or "")
+#         return '\n'.join(text_output)
+#     elif file_extension in [".docx"]:
+#         doc = Document(path_to_file)
+#         # doc = docx.getdocumenttext(path_to_file)
+#         return "\n".join([para.text for para in doc.paragraphs])
 
-    if file_extension in ['.txt', '.log']:
-        with open(path_to_file, mode='r', encoding='utf-8') as f:
-            return f.read()
-    elif file_extension in ['.json']:
-        with open(path_to_file, mode='r', encoding='utf-8') as f:
-            data = json.loads(f.read())
-            return json.dumps(data, indent=4)
-    elif file_extension in ['.csv']:
-        text_output = []
-        with open(path_to_file, mode='r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                text_output.append(', '.join(row))
-        return '\n'.join(text_output)
-    elif file_extension in ['.pdf']:
-        text_output = []
-        with open(path_to_file, mode='rb') as f:
-            reader = pypdf.PdfReader(f)
-            for page in reader.pages:
-                text_output.append(page.extract_text() or "")
-        return '\n'.join(text_output)
-    elif file_extension in [".docx"]:
-        doc = Document(path_to_file)
-        # doc = docx.getdocumenttext(path_to_file)
-        return "\n".join([para.text for para in doc.paragraphs])
+def execute_file_input(file_text):
+    return file_text
 
 def execute_chat_input(text):
-    if not text:
-        raise FileNotFoundError(text)
+    # if not text:
+    #     raise FileNotFoundError(text)
     return text
 
 def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, system_prompt=None):
