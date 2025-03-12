@@ -70,7 +70,7 @@ async def execute_dag(_nodes, _connections):
     for node_name, node in _nodes.items():
         temp.append({node_name: node})
         # temp1.append({node_name: node})
-    print(temp)
+    # print(temp)
     # print('\n', temp1)
     #     # print(f"Node name: {node_name}, type: {node.type}")
     #
@@ -107,8 +107,8 @@ async def parse_and_get_order(__json__):
     # for node_name, node in nodes.items():
     #     print(f"Node name: {node_name}, type: {node.type}")
     order = await execute_dag(nodes, connections)
-    await execute_order(order, nodes, connections)
-    return output_storage
+    result = await execute_order(order, nodes, connections)
+    return result
 
 #execute order and also check node connections such that outputs of the previous nodes are given as input to the next node
 async def execute_order(order, nodes, connections):
@@ -119,30 +119,190 @@ async def execute_order(order, nodes, connections):
                     if connection.from_node == node:
                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
             file_text = execute_file_input(nodes[node].config.fileText)
-            output_storage[node] = file_text
+            output_storage[nodes[node].type] = file_text
+            # print(output_storage)
             continue
             # print(output_storage)
-        if nodes[node].type == 'TextInput':
+        if nodes[node].type == 'Text Input':
             for connection in connections:
                 if connection.from_node is None:
                     if connection.from_node == node:
                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
             text_input = execute_chat_input(text=nodes[node].config.Text)
-            output_storage[node] = text_input
+            output_storage[nodes[node].type] = text_input
             print(output_storage)
-        if nodes[node].type == 'ModelNode':
+        if nodes[node].type == 'Gemini':
             for connection in connections:
                 if connection.from_node is None:
                     if connection.from_node == node:
                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
-            llm_response = execute_llm(nodes[node].config.modelName, nodes[node].config.input, api_key=nodes[node].config.API_key)
-            output_storage[node] = llm_response
+            llm_response = execute_llm(nodes[node].config.modelName, file_input=output_storage['File'], chat_input=output_storage['Text Input'],api_key=nodes[node].config.API_key)
+            return llm_response
+            # output_storage[nodes[node].type] = llm_response
+            # print(output_storage)
+
+
+
+
+
+
+
+
+
+
+
+# from typing import DefaultDict, Any
+# from app.engine.parser import parse_dsl_file
+# from collections import deque
+# from app.engine.tools_executor import execute_file_input, execute_llm, execute_chat_input
+# from app.engine.parser import Node, Connection
+#
+# # def compute_in_degrees(workflow: Workflow):
+# #     """
+# #     Computes the in-degree (number of dependencies) for each node in the workflow.
+# #
+# #     param workflow: Parsed workflow object containing nodes and connections.
+# #     :return: A dictionary where keys are node IDs and values are their in-degree count.
+# #     """
+# #     in_degree = {node_id: 0 for node_id in workflow.nodes}  # Initialize in-degrees to 0
+# #
+# #     # Iterate through connections and update in-degree count
+# #     for connection in workflow.connections:
+# #         in_degree[connection.to_node] += 1
+# #     return in_degree
+# #
+# # def create_adjacency_list(workflow: Workflow):
+# #     """
+# #     Creates an adjacency list from the workflow connections.
+# #
+# #     param workflow: Parsed workflow object containing nodes and connections.
+# #     :return: A dictionary representing the adjacency list.
+# #     """
+# #     adj_list = defaultdict(list)
+# #     # print(adj_list)
+# #     for connection in workflow.connections:
+# #         adj_list[connection.from_node].append(connection.to_node)
+# #     # print(adj_list)
+# #     return adj_list
+#
+# output_storage:DefaultDict[Any, Any]={}
+#
+#
+# async def execute_dag(_nodes, _connections):
+#
+#     # Creates an adjacency list from the workflow connections.
+#     adj_list = {node: [] for node in _nodes}
+#
+#     # Computes the in-degree (number of dependencies) for each node in the workflow.
+#     in_degree = {node: 0 for node in _nodes}
+#
+#     for conn in _connections:
+#         adj_list[conn.from_node].append(conn.to_node)
+#         in_degree[conn.to_node] += 1
+#
+#     queue = deque([node for node in _nodes if in_degree[node] == 0])
+#
+#     execution_order = []
+#
+#     while queue:
+#         node = queue.popleft()
+#         execution_order.append(node)
+#
+#         # Simulate execution (replace with actual node execution)
+#
+#         print(f"Executing {node}")
+#
+#
+#         # Reduce in-degree of dependent nodes
+#         for neighbor in adj_list[node]:
+#             in_degree[neighbor] -= 1
+#             if in_degree[neighbor] == 0:
+#                 queue.append(neighbor)
+#     temp = []
+#     # temp1 = []
+#     for node_name, node in _nodes.items():
+#         temp.append({node_name: node})
+#         # temp1.append({node_name: node})
+#     print(temp)
+#     # print('\n', temp1)
+#     #     # print(f"Node name: {node_name}, type: {node.type}")
+#     #
+#
+#
+#
+#     # for _node in execution_order:
+#     #     for node_name, node in temp:
+#     #         if node_name == node:
+#     #             if node.type=='File':
+#     #                 file_text=execute_file_input(node.config.path)
+#     #             if node.type=='TextInput':
+#     #                 text_input=execute_chat_input(text=node.config.input)
+#     #             if node.type=='ModelNode':
+#     #                 llm_response=execute_llm(node.config.modelName, node.config.input, api_key=node.config.API_key)
+#
+#
+#
+#     return execution_order
+#
+# async def parse_and_get_order(__json__):
+#     # adjacency_list = create_adjacency_list(Workflow)
+#
+#     # Print adjacency list
+#     # for Node, dependencies in adjacency_list.items():
+#     #     print(f"{Node} -> {dependencies}")
+#
+#
+#     workflow = parse_dsl_file(__json__)
+#     connections = workflow.connections
+#     for connection in connections:
+#         print(connection)
+#     nodes = workflow.nodes
+#     # for node_name, node in nodes.items():
+#     #     print(f"Node name: {node_name}, type: {node.type}")
+#     order = await execute_dag(nodes, connections)
+#     await execute_order(order, nodes, connections)
+#     return output_storage
+#
+# #execute order and also check node connections such that outputs of the previous nodes are given as input to the next node
+# async def execute_order(order, nodes, connections):
+#     for node in order:
+#         if nodes[node].type == 'File':
+#             for connection in connections:
+#                 if connection.from_node is None:
+#                     if connection.from_node == node:
+#                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
+#             file_text = execute_file_input(nodes[node].config.fileText)
+#             output_storage[node] = file_text
+#             continue
+#             # print(output_storage)
+#         if nodes[node].type == 'TextInput':
+#             for connection in connections:
+#                 if connection.from_node is None:
+#                     if connection.from_node == node:
+#                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
+#             text_input = execute_chat_input(text=nodes[node].config.Text)
+#             output_storage[node] = text_input
+#             print(output_storage)
+#         if nodes[node].type == 'ModelNode':
+#             for connection in connections:
+#                 if connection.from_node is None:
+#                     if connection.from_node == node:
+#                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
+#             llm_response = execute_llm(nodes[node].config.modelName, nodes[node].config.input, api_key=nodes[node].config.API_key)
+#             output_storage[node] = llm_response
+
+
+
+
+
+
+
 
 # import asyncio
 #
 # async def main():
-#     order = await parse_and_get_order(r"D:\temp-Codecraft\DSL2.json")  # Await the coroutine
-#     print(order)
+#     order = await parse_and_get_order(r"D:\temp-Codecraft\DSL3.json")  # Await the coroutine
+#     # print(order)
 #
 # asyncio.run(main())
 

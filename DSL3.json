@@ -1,0 +1,102 @@
+{
+    "version": 1,
+    "workflow_id": "7695183f-6c83-4dc5-a0aa-97e26aeeb0d8",
+    "workflow_name": "test1",
+    "description": "sfsdf",
+    "created_by": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "nodes": {
+      "1": {
+        "type": "Start Node",
+        "id": "1",
+        "position": {
+          "x": -49.06256238933935,
+          "y": 200.08147531507413
+        },
+        "config": {}
+      },
+      "node_1741786707412": {
+        "type": "Text Input",
+        "id": "node_1741786707412",
+        "position": {
+          "x": 173.4003328038562,
+          "y": 58.83971161856178
+        },
+        "config": {
+          "Text": "hi, help me to analyze this error log output"
+        }
+      },
+      "node_1741786711166": {
+        "type": "Text Output",
+        "id": "node_1741786711166",
+        "position": {
+          "x": 666.6413754557034,
+          "y": 106.16173047076853
+        },
+        "config": {}
+      },
+      "model_1741786713945": {
+        "type": "Gemini",
+        "id": "model_1741786713945",
+        "position": {
+          "x": 420.9308929538606,
+          "y": 133.4628951931955
+        },
+        "config": {
+          "modelName": "Gemini",
+          "temperature": 0.1,
+          "input": "receiving_input",
+          "system_message": "you are a python expert. you should answer in a way such that you can debug errors",
+          "maximum_tokens": 4096,
+          "API_key": "ayYTEOzaSp0JBTXjYdKHoe7fXdS3kMRr"
+        }
+      },
+      "file_1741786714364": {
+        "type": "File",
+        "id": "file_1741786714364",
+        "position": {
+          "x": 359.95829174044036,
+          "y": -181.48334548827094
+        },
+        "config": {
+          "filepath": "logs.txt",
+          "fileText": "INFO:     Waiting for application startup.\r\n2025-03-08 16:58:27,080 INFO sqlalchemy.engine.Engine select pg_catalog.version()\r\n2025-03-08 16:58:27,081 INFO sqlalchemy.engine.Engine [raw sql] ()\r\n2025-03-08 16:58:27,231 INFO sqlalchemy.engine.Engine select current_schema()\r\n2025-03-08 16:58:27,231 INFO sqlalchemy.engine.Engine [raw sql] ()\r\n2025-03-08 16:58:27,431 INFO sqlalchemy.engine.Engine show standard_conforming_strings\r\n2025-03-08 16:58:27,431 INFO sqlalchemy.engine.Engine [raw sql] ()\r\n2025-03-08 16:58:27,560 INFO sqlalchemy.engine.Engine BEGIN (implicit)\r\n2025-03-08 16:58:27,563 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname\r\nFROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace\r\nWHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR\r\n2025-03-08 16:58:27,564 INFO sqlalchemy.engine.Engine [generated in 0.00043s] ('workflows', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')\r\n2025-03-08 16:58:27,680 INFO sqlalchemy.engine.Engine \r\nCREATE TABLE workflows (\r\n        workflow_id UUID NOT NULL,\r\n        workflow_name VARCHAR,\r\n        description TEXT,\r\n        status VARCHAR,\r\n        created_at TIMESTAMP WITH TIME ZONE,\r\n        updated_at TIMESTAMP WITH TIME ZONE,\r\n        created_by UUID,\r\n        dsl_file JSON,\r\n        PRIMARY KEY (workflow_id)\r\n)\r\n\r\n\r\n2025-03-08 16:58:27,681 INFO sqlalchemy.engine.Engine [no key 0.00044s] ()\r\n2025-03-08 16:58:27,761 INFO sqlalchemy.engine.Engine ROLLBACK\r\nERROR:    Traceback (most recent call last):\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 545, in _prepare_and_execute\r\n    self._rows = deque(await prepared_stmt.fetch(*parameters))\r\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\asyncpg\\prepared_stmt.py\", line 176, in fetch\r\n    data = await self.__bind_execute(args, 0, timeout)\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\asyncpg\\prepared_stmt.py\", line 267, in __bind_execute\r\n    data, status, _ = await self.__do_execute(\r\n                      ^^^^^^^^^^^^^^^^^^^^^^^^\r\n        lambda protocol: protocol.bind_execute(\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n            self._state, args, '', limit, True, timeout))\r\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\asyncpg\\prepared_stmt.py\", line 256, in __do_execute\r\n    return await executor(protocol)\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"asyncpg\\\\protocol\\\\protocol.pyx\", line 206, in bind_execute\r\nasyncpg.exceptions.InsufficientPrivilegeError: permission denied for schema public\r\n\r\nThe above exception was the direct cause of the following exception:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1964, in _exec_single_context\r\n    self.dialect.do_execute(\r\n    ~~~~~~~~~~~~~~~~~~~~~~~^\r\n        cursor, str_statement, effective_parameters, context\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\default.py\", line 942, in do_execute\r\n    cursor.execute(statement, parameters)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 580, in execute\r\n    self._adapt_connection.await_(\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\r\n        self._prepare_and_execute(operation, parameters)\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py\", line 132, in await_only\r\n    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py\", line 196, in greenlet_spawn\r\n    value = await result\r\n            ^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 558, in _prepare_and_execute\r\n    self._handle_exception(error)\r\n    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 508, in _handle_exception\r\n    self._adapt_connection._handle_exception(error)\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 792, in _handle_exception\r\n    raise translated_error from error\r\nsqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.InsufficientPrivilegeError'>: permission denied for schema public\r\n\r\nThe above exception was the direct cause of the following exception:\r\n\r\nTraceback (most recent call last):\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\starlette\\routing.py\", line 693, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Users\\shelk\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 133, in merged_lifespan\r\n    async with original_context(app) as maybe_original_state:\r\n               ~~~~~~~~~~~~~~~~^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\starlette\\routing.py\", line 569, in __aenter__\r\n    await self._router.startup()\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\starlette\\routing.py\", line 670, in startup\r\n    await handler()\r\n  File \"D:\\temp-Codecraft\\app\\main.py\", line 11, in on_startup\r\n    await init_db()\r\n  File \"D:\\temp-Codecraft\\app\\db\\session.py\", line 10, in init_db\r\n    await conn.run_sync(Base.metadata.create_all)\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\engine.py\", line 887, in run_sync\r\n    return await greenlet_spawn(\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n        fn, self._proxied, *arg, _require_await=False, **kw\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py\", line 201, in greenlet_spawn\r\n    result = context.throw(*sys.exc_info())\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\schema.py\", line 5907, in create_all\r\n    bind._run_ddl_visitor(\r\n    ~~~~~~~~~~~~~~~~~~~~~^\r\n        ddl.SchemaGenerator, self, checkfirst=checkfirst, tables=tables\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 2456, in _run_ddl_visitor\r\n    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\visitors.py\", line 664, in traverse_single\r\n    return meth(obj, **kw)\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\ddl.py\", line 928, in visit_metadata\r\n    self.traverse_single(\r\n    ~~~~~~~~~~~~~~~~~~~~^\r\n        table,\r\n        ^^^^^^\r\n    ...<2 lines>...\r\n        _is_metadata_operation=True,\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\visitors.py\", line 664, in traverse_single\r\n    return meth(obj, **kw)\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\ddl.py\", line 966, in visit_table\r\n    )._invoke_with(self.connection)\r\n      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\ddl.py\", line 314, in _invoke_with\r\n    return bind.execute(self)\r\n           ~~~~~~~~~~~~^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1416, in execute\r\n    return meth(\r\n        self,\r\n        distilled_parameters,\r\n        execution_options or NO_OPTIONS,\r\n    )\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\ddl.py\", line 180, in _execute_on_connection\r\n    return connection._execute_ddl(\r\n           ~~~~~~~~~~~~~~~~~~~~~~~^\r\n        self, distilled_params, execution_options\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1527, in _execute_ddl\r\n    ret = self._execute_context(\r\n        dialect,\r\n    ...<4 lines>...\r\n        compiled,\r\n    )\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1843, in _execute_context\r\n    return self._exec_single_context(\r\n           ~~~~~~~~~~~~~~~~~~~~~~~~~^\r\n        dialect, context, statement, parameters\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1983, in _exec_single_context\r\n    self._handle_dbapi_exception(\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\r\n        e, str_statement, effective_parameters, cursor, context\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 2352, in _handle_dbapi_exception\r\n    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py\", line 1964, in _exec_single_context\r\n    self.dialect.do_execute(\r\n    ~~~~~~~~~~~~~~~~~~~~~~~^\r\n        cursor, str_statement, effective_parameters, context\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\default.py\", line 942, in do_execute\r\n    cursor.execute(statement, parameters)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 580, in execute\r\n    self._adapt_connection.await_(\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\r\n        self._prepare_and_execute(operation, parameters)\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py\", line 132, in await_only\r\n    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py\", line 196, in greenlet_spawn\r\n    value = await result\r\n            ^^^^^^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 558, in _prepare_and_execute\r\n    self._handle_exception(error)\r\n    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 508, in _handle_exception\r\n    self._adapt_connection._handle_exception(error)\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\r\n  File \"D:\\codecraft-backend\\.venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py\", line 792, in _handle_exception\r\n    raise translated_error from error\r\nsqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.InsufficientPrivilegeError'>: permission denied for schema public\r\n[SQL:\r\nCREATE TABLE workflows (\r\n        workflow_id UUID NOT NULL,\r\n        workflow_name VARCHAR,\r\n        description TEXT,\r\n        status VARCHAR,\r\n        created_at TIMESTAMP WITH TIME ZONE,\r\n        updated_at TIMESTAMP WITH TIME ZONE,\r\n        created_by UUID,\r\n        dsl_file JSON,\r\n        PRIMARY KEY (workflow_id)\r\n)\r\n\r\n]\r\n(Background on this error at: https://sqlalche.me/e/20/f405)\r\n\r\nERROR:    Application startup failed. Exiting.\r\n\r\n",
+          "fileBase64": "",
+          "fileType": "text/plain"
+        }
+      }
+    },
+    "connections": [
+      {
+        "from": {
+          "node": "node_1741786707412",
+          "output": "default"
+        },
+        "to": {
+          "node": "model_1741786713945",
+          "input": "default"
+        }
+      },
+      {
+        "from": {
+          "node": "model_1741786713945",
+          "output": "default"
+        },
+        "to": {
+          "node": "node_1741786711166",
+          "input": "default"
+        }
+      },
+      {
+        "from": {
+          "node": "file_1741786714364",
+          "output": "output"
+        },
+        "to": {
+          "node": "model_1741786713945",
+          "input": "default"
+        }
+      }
+    ],
+    "status": "paused",
+    "created_at": "2025-03-12T13:37:21.262731Z"
+  }

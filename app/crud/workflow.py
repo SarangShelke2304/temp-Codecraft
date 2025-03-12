@@ -55,9 +55,9 @@ async def start_workflow_execution(workflow_id: uuid.UUID):
         workflow = await session.execute(select(Workflow).filter(Workflow.workflow_id == workflow_id))
         wf = workflow.scalars().first()
         dsl_file = wf.dsl_file
-        # order = await engine.parse_and_get_order(dsl_file)
+        result = await engine.parse_and_get_order(dsl_file)
         await session.commit()
-    return {"message": "Execution started", "execution_id": 123}
+    return {"message": "Execution started", "execution_id": 123, "Response": result}
 
 async def get_execution_status(workflow_id: uuid.UUID, execution_id: uuid.UUID):
     # Simulate checking execution status
@@ -65,4 +65,10 @@ async def get_execution_status(workflow_id: uuid.UUID, execution_id: uuid.UUID):
 
 async def retry_execution(workflow_id: uuid.UUID, execution_id: uuid.UUID):
     # Simulate retrying execution and generating new execution ID
+    async with async_session() as session:
+        workflow = await session.execute(select(Workflow).filter(Workflow.workflow_id == workflow_id))
+        wf = workflow.scalars().first()
+        dsl_file = wf.dsl_file
+        result = await engine.parse_and_get_order(dsl_file)
+        await session.commit()
     return {"message": "Retrying", "new_execution_id": 124}

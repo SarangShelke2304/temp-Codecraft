@@ -57,6 +57,16 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": chat_input})
+    # # open a gemini client and run the query
+    # if model_name.lower()=="gemini":
+    #     client = GeminiClient(api_key=api_key)
+    #     response = client.chat.create(
+    #         model="gemini",  # Replace with appropriate Gemini model name
+    #         messages=messages
+    #     )
+    #     return response["choices"][0]["content"]  # Adjust based on actual response format
+    #
+    #
     if model_name.lower()=="gpt-3.5-turbo":
         client = openai.OpenAI(api_key=api_key)
         response = client.chat.completions.create(
@@ -65,7 +75,7 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
             # prompt=chat_input
         )
         return response["choices"][0]["content"]
-    if model_name.lower()=="mistral-7b":
+    if model_name.lower()=="gemini":
         client = Mistral(api_key=api_key)
         messages.append({"role": "system", "content": chat_input})
         response = client.chat.complete(
@@ -85,9 +95,9 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
         raise ValueError("Model not supported")
 
 
-if __name__ == "__main__":
-    text = execute_file_input(r'/test.docx')
-    # print(text)
-    t = execute_llm("mistral-7b", r'/test.docx', "hi, please analyze this and give me a one line answer on what this is.", "LqlGQaD5YIcu0RtSVejsrZbWJcH83m0a")
-    # print(type(t))
-    print(t)
+# if __name__ == "__main__":
+#     text = execute_file_input(r'/test.docx')
+#     # print(text)
+#     t = execute_llm("mistral-7b", r'/test.docx', "hi, please analyze this and give me a one line answer on what this is.", "LqlGQaD5YIcu0RtSVejsrZbWJcH83m0a")
+#     # print(type(t))
+#     print(t)
