@@ -57,7 +57,7 @@ async def execute_dag(_nodes, _connections):
 
         # Simulate execution (replace with actual node execution)
 
-        print(f"Executing {node}")
+        # print(f"Executing {node}")
 
 
         # Reduce in-degree of dependent nodes
@@ -101,8 +101,8 @@ async def parse_and_get_order(__json__):
 
     workflow = parse_dsl_file(__json__)
     connections = workflow.connections
-    for connection in connections:
-        print(connection)
+    # for connection in connections:
+    #     print(connection)
     nodes = workflow.nodes
     # for node_name, node in nodes.items():
     #     print(f"Node name: {node_name}, type: {node.type}")
@@ -130,7 +130,7 @@ async def execute_order(order, nodes, connections):
                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
             text_input = execute_chat_input(text=nodes[node].config.Text)
             output_storage[nodes[node].type] = text_input
-            print(output_storage)
+            # print(output_storage)
         if nodes[node].type == 'Gemini':
             for connection in connections:
                 if connection.from_node is None:
