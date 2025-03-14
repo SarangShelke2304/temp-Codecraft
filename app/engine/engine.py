@@ -123,7 +123,7 @@ async def execute_order(order, nodes, connections):
             # print(output_storage)
             continue
             # print(output_storage)
-        if nodes[node].type == 'Text Input':
+        if nodes[node].type == 'Text Input' or nodes[node].type == 'Chat Input':
             for connection in connections:
                 if connection.from_node is None:
                     if connection.from_node == node:
@@ -131,12 +131,19 @@ async def execute_order(order, nodes, connections):
             text_input = execute_chat_input(text=nodes[node].config.Text)
             output_storage[nodes[node].type] = text_input
             # print(output_storage)
-        if nodes[node].type == 'Gemini':
+        if nodes[node].type == 'Mistral':
             for connection in connections:
                 if connection.from_node is None:
                     if connection.from_node == node:
                         nodes[connection.to_node].config.input = output_storage[connection.from_node]
-            llm_response = execute_llm(nodes[node].config.modelName, file_input=output_storage['File'], chat_input=output_storage['Text Input'],api_key=nodes[node].config.API_key)
+            if 'Text Input' in output_storage:
+                chat_input = output_storage['Text Input']
+            elif 'Chat Input' in output_storage:
+                chat_input = output_storage['Chat Input']
+            else:
+                raise Exception("No text input found")
+            llm_response = execute_llm(nodes[node].config.modelName, file_input=output_storage['File'], chat_input=chat_input,api_key=nodes[node].config.API_key)
+            print(llm_response)
             return llm_response
             # output_storage[nodes[node].type] = llm_response
             # print(output_storage)

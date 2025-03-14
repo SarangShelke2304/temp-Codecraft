@@ -75,7 +75,7 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
             # prompt=chat_input
         )
         return response["choices"][0]["content"]
-    if model_name.lower()=="gemini":
+    if model_name.lower()=="mistral":
         client = Mistral(api_key=api_key)
         messages.append({"role": "system", "content": chat_input})
         response = client.chat.complete(
@@ -94,6 +94,10 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
     else:
         raise ValueError("Model not supported")
 
+# def chat_response_generator(chat_id, user_chat_message):
+#
+#
+#
 
 # if __name__ == "__main__":
 #     text = execute_file_input(r'/test.docx')

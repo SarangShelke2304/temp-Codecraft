@@ -6,6 +6,7 @@ from app.crud.workflow import (
     create_workflow, get_workflow, update_workflow, delete_workflow,
     start_workflow_execution, get_execution_status, retry_execution
 )
+# from app.engine.tools_executor import chat_response_generator
 
 router = APIRouter()
 
@@ -45,3 +46,8 @@ async def check_execution_status(workflow_id: uuid.UUID, execution_id: uuid.UUID
 async def retry_workflow(workflow_id: uuid.UUID, execution_id: uuid.UUID):
     result = await retry_execution(workflow_id, execution_id)
     return result
+#
+# @router.post("{workflow_id}/chat/{chat_id}", response_model=dict)
+# async def send_message(chat_id: uuid.UUID, user_chat_message: str):
+#     response = chat_response_generator(chat_id, user_chat_message)
+#     return response

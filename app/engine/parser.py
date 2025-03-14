@@ -13,6 +13,7 @@ class NodeConfig:
     y_coordinate: Optional[int] = None
     Text:Optional[str] = None
     sessionID: Optional[str] = None
+    files: Optional[str] = None
     filepath: Optional[str] = None
     fileText: Optional[str] = None
     fileBase64: Optional[str] = None
@@ -62,13 +63,16 @@ class WorkflowParser:
         # Parse nodes
         nodes = {}
         for nodeName, node_data in workflow_data['nodes'].items():
-            nodes[nodeName] = Node(
-                type=node_data['type'],
-                id=node_data['id'],
-                config=NodeConfig(**node_data.get('config', {})),
-                inputs=node_data.get('inputs', []),
-                outputs=node_data.get('outputs', [])
-            )
+            try:
+                nodes[nodeName] = Node(
+                    type=node_data['type'],
+                    id=node_data['id'],
+                    config=NodeConfig(**node_data.get('config', {})),
+                    inputs=node_data.get('inputs', []),
+                    outputs=node_data.get('outputs', [])
+                )
+            except Exception as e:
+                raise e
 
         # for node_name, node in nodes.items():
         #     print(f"Node name: {node_name}, type: {node.type}")

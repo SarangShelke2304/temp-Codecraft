@@ -29,3 +29,8 @@ class WorkflowResponse(WorkflowBase):
 
 class ExecutionStatus(BaseModel):
     message: str
+#
+# class ChatBase(BaseModel):
+#     chat_id: uuid.UUID
+#     workflow_id: uuid.UUID
+#     chat_messages: Dict[Any, Any]
