@@ -143,7 +143,7 @@ async def execute_order(order, nodes, connections):
             else:
                 raise Exception("No text input found")
             llm_response = execute_llm(nodes[node].config.modelName, file_input=output_storage['File'], chat_input=chat_input,api_key=nodes[node].config.API_key)
-            print(llm_response)
+            # print(llm_response)
             return llm_response
             # output_storage[nodes[node].type] = llm_response
             # print(output_storage)
