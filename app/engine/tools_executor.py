@@ -44,6 +44,10 @@ def execute_chat_input(text):
     # if not text:
     #     raise FileNotFoundError(text)
     return text
+#
+# def call_model(model, state: MessagesState):
+#     response = model.invoke(state["messages"])
+#     return {"messages": response}
 
 def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, system_prompt=None):
     if not api_key:
@@ -83,21 +87,27 @@ def execute_llm(model_name, file_input=None, chat_input=None, api_key=None, syst
             messages = messages
         )
         return response.choices[0].message.content
+        # model = init_chat_model("mistral-small", model_provider="mistral")
+        # graph = StateGraph(state_schema=MessagesState)
+        # graph.add_edge(START, "model")
+        # graph.add_node("model", model=call_model(model))
+        # memory = MemorySaver()
+        # chat = graph.compile(checkpointer=memory)
+        # config = {"configurable":{"thread_id":"123"}}
+        # input_message = [HumanMessage(messages)]
+        # output = chat.invoke({"messages": input_message}, config)
+        # return output["messages"][-1].pretty_print()
     if model_name.lower() in ["claude-2", "claude-3"]:
         client = Anthropic(api_key=api_key)
         response = client.messages.create(
-            model = model_name,
-            messages = [{"role": "system", "content": chat_input},{"role": "user", "content": file_input}],
+            model=model_name,
+            messages=[{"role": "system", "content": chat_input}, {"role": "user", "content": file_input}],
             max_tokens=4096
         )
         return response.content[0].text
     else:
         raise ValueError("Model not supported")
 
-# def chat_response_generator(chat_id, user_chat_message):
-#
-#
-#
 
 # if __name__ == "__main__":
 #     text = execute_file_input(r'/test.docx')

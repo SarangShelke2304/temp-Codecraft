@@ -1,11 +1,13 @@
-from app.models.workflow import Workflow
-from app.schemas.workflow import WorkflowCreate, WorkflowUpdate
+from app.engine.engine import chat_memory_buffer
+from app.models.workflow import Workflow, Executions
+from app.schemas.workflow import WorkflowCreate, WorkflowUpdate, Execution
 from app.db.session import async_session
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from sqlalchemy.future import select
 from app.engine import engine
 import uuid
+import datetime
 
 async def create_workflow(workflow: WorkflowCreate):
     async with async_session() as session:
@@ -52,12 +54,27 @@ async def delete_workflow(workflow_id: uuid.UUID):
 async def start_workflow_execution(workflow_id: uuid.UUID):
     # Simulate starting workflow execution and generating an execution ID
     async with async_session() as session:
+        execution = Executions(
+            execution_id=uuid.uuid4(),
+            workflow_id=workflow_id,
+            started_at = datetime.datetime.now()
+        )
+        try:
+            session.add(execution)
+            await session.commit()
+            await session.refresh(execution)
+        except IntegrityError:
+            await session.rollback()
+            raise HTTPException(
+                status_code=400,
+                detail=IntegrityError
+            )
         workflow = await session.execute(select(Workflow).filter(Workflow.workflow_id == workflow_id))
         wf = workflow.scalars().first()
         dsl_file = wf.dsl_file
-        result = await engine.parse_and_get_order(dsl_file)
+        result = await engine.parse_and_get_order(dsl_file, execution.execution_id)
         await session.commit()
-    return {"message": "Execution started", "execution_id": 123, "Response": result}
+    return {"message": "Execution started", "execution_id": execution.execution_id, "Response": result}
 
 async def get_execution_status(workflow_id: uuid.UUID, execution_id: uuid.UUID):
     # Simulate checking execution status
@@ -71,4 +88,4 @@ async def retry_execution(workflow_id: uuid.UUID, execution_id: uuid.UUID):
         dsl_file = wf.dsl_file
         result = await engine.parse_and_get_order(dsl_file)
         await session.commit()
-    return {"message": "Retrying", "new_execution_id": 124}
+    return {"message": "Retrying", "new_execution_id": 124, "result": result}

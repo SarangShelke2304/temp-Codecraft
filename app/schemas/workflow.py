@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List, Any, Dict
+from typing import Optional, Any, Dict
 from datetime import datetime
 import uuid
 
@@ -29,6 +29,12 @@ class WorkflowResponse(WorkflowBase):
 
 class ExecutionStatus(BaseModel):
     message: str
+
+class Execution(BaseModel):
+    execution_id: uuid.UUID
+    workflow_id: uuid.UUID
+    started_at: datetime
+    chat_memory_buffer: Dict[Any, Any]
 #
 # class ChatBase(BaseModel):
 #     chat_id: uuid.UUID

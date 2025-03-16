@@ -1,8 +1,10 @@
-from typing import DefaultDict, Any
+from typing import Dict, Any
+from sqlalchemy.future import select
 from app.engine.parser import parse_dsl_file
 from collections import deque
 from app.engine.tools_executor import execute_file_input, execute_llm, execute_chat_input
-from app.engine.parser import Node, Connection
+from app.db.session import async_session
+from app.models.workflow import Executions
 
 # def compute_in_degrees(workflow: Workflow):
 #     """
@@ -32,8 +34,9 @@ from app.engine.parser import Node, Connection
 #     # print(adj_list)
 #     return adj_list
 
-output_storage:DefaultDict[Any, Any]={}
-
+output_storage:Dict[Any, Any]={}
+chat_memory_buffer:Dict[Any, Any]={}
+curr_exec_config:Dict[Any, Any]={}
 
 async def execute_dag(_nodes, _connections):
 
@@ -91,7 +94,7 @@ async def execute_dag(_nodes, _connections):
 
     return execution_order
 
-async def parse_and_get_order(__json__):
+async def parse_and_get_order(__json__, execution_id):
     # adjacency_list = create_adjacency_list(Workflow)
 
     # Print adjacency list
@@ -100,6 +103,7 @@ async def parse_and_get_order(__json__):
 
 
     workflow = parse_dsl_file(__json__)
+    workflow_id = workflow.workflow_id
     connections = workflow.connections
     # for connection in connections:
     #     print(connection)
@@ -107,11 +111,11 @@ async def parse_and_get_order(__json__):
     # for node_name, node in nodes.items():
     #     print(f"Node name: {node_name}, type: {node.type}")
     order = await execute_dag(nodes, connections)
-    result = await execute_order(order, nodes, connections)
+    result = await execute_order(order, nodes, connections, execution_id, workflow_id)
     return result
 
 #execute order and also check node connections such that outputs of the previous nodes are given as input to the next node
-async def execute_order(order, nodes, connections):
+async def execute_order(order, nodes, connections, execution_id, workflow_id):
     for node in order:
         if nodes[node].type == 'File':
             for connection in connections:
@@ -143,16 +147,49 @@ async def execute_order(order, nodes, connections):
             else:
                 raise Exception("No text input found")
             llm_response = execute_llm(nodes[node].config.modelName, file_input=output_storage['File'], chat_input=chat_input,api_key=nodes[node].config.API_key)
+            curr_exec_config[execution_id] = {
+                "modelName": nodes[node].config.modelName,
+                "apiKey": nodes[node].config.API_key
+            }
             # print(llm_response)
+            chat_memory_buffer[execution_id] = [{
+                "human_input": chat_input,
+                "ai_response": llm_response
+            }]
+            async with async_session() as session:
+                to_be_updated = await session.execute(select(Executions).filter(Executions.execution_id == execution_id))
+                _exec = to_be_updated.scalars().first()
+                _exec.chat_memory_buffer = chat_memory_buffer[execution_id]
+                # execution = Executions(
+                #     execution_id=execution_id,
+                #     workflow_id=workflow_id,
+                #     chat_memory_buffer=chat_memory_buffer[execution_id]
+                # )
+                # try:
+                    # session.add(execution)
+                await session.commit()
+                # except Exception as e:
+                #     raise e
             return llm_response
             # output_storage[nodes[node].type] = llm_response
             # print(output_storage)
 
-
-
-
-
-
+async def chat_response_generator(execution_id, user_chat_message):
+    # print(chat_memory_buffer)
+    async with async_session() as session:
+        exec_to_get = await session.execute(select(Executions).filter(Executions.execution_id == execution_id))
+        _exec = exec_to_get.scalars().first()
+        chat_memory = _exec.chat_memory_buffer
+        # print(chat_memory)
+    # chat_memory = chat_memory_buffer[execution_id]
+    response =  execute_llm(model_name=curr_exec_config[execution_id]["modelName"],chat_input=user_chat_message, api_key=curr_exec_config[execution_id]["apiKey"], system_prompt=str(chat_memory))
+    chat_memory_buffer[execution_id].append({"human_input": user_chat_message, "ai_response": response})
+    async with async_session() as session:
+        to_be_updated = await session.execute(select(Executions).filter(Executions.execution_id == execution_id))
+        _exec = to_be_updated.scalars().first()
+        _exec.chat_memory_buffer = chat_memory_buffer[execution_id]
+        await session.commit()
+    return response
 
 
 
