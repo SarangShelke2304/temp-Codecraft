@@ -1,10 +1,10 @@
 import uuid
-
+from typing import List
 from fastapi import APIRouter, HTTPException
 from app.schemas.workflow import WorkflowCreate, WorkflowResponse, WorkflowUpdate, ExecutionStatus
 from app.crud.workflow import (
     create_workflow, get_workflow, update_workflow, delete_workflow,
-    start_workflow_execution, get_execution_status, retry_execution
+    start_workflow_execution, get_execution_status, retry_execution, get_user_workflows
 )
 from app.engine.engine import chat_response_generator
 
@@ -51,3 +51,10 @@ async def retry_workflow(workflow_id: uuid.UUID, execution_id: uuid.UUID):
 async def send_message(chat_id: uuid.UUID, user_chat_message: str):
     response = await chat_response_generator(chat_id, user_chat_message)
     return {"response": response}
+
+@router.get("/", response_model=List[WorkflowResponse])
+async def read_user_workflows(user_id: uuid.UUID):
+    workflows = await get_user_workflows(user_id)
+    if not workflows:
+        raise HTTPException(status_code=404, detail="No workflows found for this user")
+    return workflows

@@ -1,6 +1,6 @@
 from app.engine.engine import chat_memory_buffer
 from app.models.workflow import Workflow, Executions
-from app.schemas.workflow import WorkflowCreate, WorkflowUpdate, Execution
+from app.schemas.workflow import WorkflowCreate, WorkflowUpdate, Execution, WorkflowResponse
 from app.db.session import async_session
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
@@ -89,3 +89,9 @@ async def retry_execution(workflow_id: uuid.UUID, execution_id: uuid.UUID):
         result = await engine.parse_and_get_order(dsl_file)
         await session.commit()
     return {"message": "Retrying", "new_execution_id": 124, "result": result}
+
+async def get_user_workflows(user_id: uuid.UUID):
+    async with async_session() as session:
+        result = await session.execute(select(Workflow).filter(Workflow.created_by == user_id))
+        workflows = result.scalars().all()
+        return [WorkflowResponse(**workflow.__dict__) for workflow in workflows] 
