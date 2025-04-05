@@ -1,0 +1,102 @@
+{
+    "version": 1,
+    "workflow_id": "9f773ef3-9fec-4bdf-99bc-0e77e2aba0ab",
+    "workflow_name": "llama_index_test_6",
+    "description": "sfsdf",
+    "created_by": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "nodes": {
+      "1": {
+        "type": "Start Node",
+        "id": "1",
+        "position": {
+          "x": -49.06256238933935,
+          "y": 200.08147531507413
+        },
+        "config": {}
+      },
+      "node_1741786707412": {
+        "type": "Text Input",
+        "id": "node_1741786707412",
+        "position": {
+          "x": 173.4003328038562,
+          "y": 58.83971161856178
+        },
+        "config": {
+          "Text": "hi, explain this file"
+        }
+      },
+      "node_1741786711166": {
+        "type": "Text Output",
+        "id": "node_1741786711166",
+        "position": {
+          "x": 666.6413754557034,
+          "y": 106.16173047076853
+        },
+        "config": {}
+      },
+      "model_1741786713945": {
+        "type": "LLM",
+        "id": "model_1741786713945",
+        "position": {
+          "x": 420.9308929538606,
+          "y": 133.4628951931955
+        },
+        "config": {
+          "modelName": "gemini-1.5-flash",
+          "temperature": 0.1,
+          "input": "receiving_input",
+          "system_message": "you are a python expert. you should answer in a way such that you can debug errors",
+          "maximum_tokens": 4096,
+          "API_key": "AIzaSyBgmiUM5Rjp-HeIkAY0tnaahF-d4rklOGE"
+        }
+      },
+      "file_1741786714364": {
+        "type": "File",
+        "id": "file_1741786714364",
+        "position": {
+          "x": 359.95829174044036,
+          "y": -181.48334548827094
+        },
+        "config": {
+          "filepath": null,
+          "fileText": null,
+          "fileBase64": null,
+          "fileType": null
+        }
+      }
+    },
+    "connections": [
+      {
+        "from": {
+          "node": "node_1741786707412",
+          "output": "default"
+        },
+        "to": {
+          "node": "model_1741786713945",
+          "input": "default"
+        }
+      },
+      {
+        "from": {
+          "node": "model_1741786713945",
+          "output": "default"
+        },
+        "to": {
+          "node": "node_1741786711166",
+          "input": "default"
+        }
+      },
+      {
+        "from": {
+          "node": "file_1741786714364",
+          "output": "output"
+        },
+        "to": {
+          "node": "model_1741786713945",
+          "input": "default"
+        }
+      }
+    ],
+    "status": "paused",
+    "created_at": "2025-03-12T13:37:21.262731Z"
+  }
