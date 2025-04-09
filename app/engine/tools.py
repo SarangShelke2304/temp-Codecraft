@@ -35,6 +35,8 @@ class ToolExecutor:
         system_message = configs.system_message if hasattr(configs, 'system_message') else None
         api_key = configs.API_key if hasattr(configs, 'API_key') else None
         method = f"execute_{model.lower().replace('-','_').replace('.','_').replace(' ','_')}"
+        print("----------------------------------------------")
+        print(method)
         llm_method = getattr(self,method)
         if callable(llm_method):
             response = await llm_method(model=model, temperature=temperature, chat_input=doc, api_key=api_key, file=arg)
