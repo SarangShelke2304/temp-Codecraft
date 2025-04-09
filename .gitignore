@@ -5,3 +5,4 @@ __pycache__/
 *.pyd
 *.db
 *.sqlite3
+/codecraft-fronend

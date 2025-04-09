@@ -1,8 +1,9 @@
 # from app.engine.engine import chat_memory_buffer
 import base64
+from typing import List,  Any
 from sqlalchemy.orm.attributes import flag_modified
 from app.models.workflow import WorkflowModel, Executions
-from app.models.frontend_models import _Components
+from app.models.frontend_models import _Components, _Configs, _PropertyTypes
 from app.schemas.api_schemas import WorkflowCreate, WorkflowUpdate, Execution
 from app.db.session import async_session
 from sqlalchemy.exc import IntegrityError
@@ -123,8 +124,29 @@ async def upload_file(file, workflow_id: uuid.UUID):
 
 async def get_panel_components():
     async with async_session() as session:
-        #get all rows from table "Panel_components"
         result = await session.execute(select(_Components))
         components = result.scalars().all()
         # print(components)
         return components
+    
+async def get_configs(node_id):
+    async with async_session() as session:
+        asset_ids = await session.execute(select(_Components.asset_id).filter(_Components.node_id==node_id))
+        asset_id =  asset_ids.scalars().first()
+        _config_ids = await session.execute(select(_Configs.config_id).filter(_Configs.asset_id==asset_id))
+        config_ids = _config_ids.scalars().all()
+        component_configs : List[Any]=[]
+        for config_id in config_ids:
+            _property_ids = await session.execute(select(_PropertyTypes.property_id).filter(_PropertyTypes.config_id==config_id))
+            property_ids = _property_ids.scalars().all()
+            if not property_ids:
+                _component_config = await session.execute(select(_Configs.property_name, _Configs.property_type).filter(_Configs.config_id==config_id))
+                component_config = _component_config.first()
+                component_configs.append({f"{component_config[0]} : {component_config[1]}"})
+            else:
+                for property_id in property_ids:
+                    _component_config = await session.execute(select(_PropertyTypes.property_value).filter(_PropertyTypes.config_id==config_id))
+                    component_config = _component_config.scalars().all()
+                component_configs.append({f"dropdown: {component_config}"})
+            # component_configs.append(component_config[1])
+        return component_configs

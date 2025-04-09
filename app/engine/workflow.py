@@ -94,7 +94,6 @@ class _Workflow(Workflow):
             else:
                 encoded_data = base64_data
 
-            # Ensure proper padding
             encoded_data = encoded_data.strip().replace("\n", "").replace("\r", "")
             encoded_data = fix_base64_padding(encoded_data)
 
